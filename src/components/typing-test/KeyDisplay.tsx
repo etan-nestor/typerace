@@ -1,0 +1,20 @@
+import { AnimatePresence, motion } from 'framer-motion'
+
+export const KeyDisplay = ({ lastPressedKey }: { lastPressedKey: string | null }) => {
+  return (
+    <div className="flex justify-center">
+      <AnimatePresence>
+        {lastPressedKey && (
+          <motion.div
+            initial={{ scale: 0.5, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 1.5, opacity: 0 }}
+            className="bg-gradient-to-br from-[#FE277E] to-[#E21D6D] text-white text-4xl font-bold w-24 h-24 rounded-xl flex items-center justify-center shadow-xl border-2 border-white/20"
+          >
+            {lastPressedKey}
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  )
+}
