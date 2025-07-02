@@ -1,5 +1,6 @@
 'use client'
 
+import { AuthProvider } from '@/context/AuthContext'
 import { motion } from 'framer-motion'
 import { Home, Keyboard, Swords, Trophy, User, Settings, LogOut, ChevronLeft, ChevronRight } from 'lucide-react'
 import Link from 'next/link'
@@ -28,6 +29,7 @@ export default function MainLayout({
   }
 
   return (
+    
     <div className="flex h-screen w-full overflow-hidden">
       {/* Sidebar élégante */}
       <motion.aside
@@ -96,9 +98,12 @@ export default function MainLayout({
         </header>
 
         {/* Contenu des pages */}
+        <AuthProvider>
         <main className="flex-1 relative">
           {children}
         </main>
+        </AuthProvider>
+       
       </div>
     </div>
   )

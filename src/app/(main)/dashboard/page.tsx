@@ -1,20 +1,78 @@
+// app/dashboard/page.tsx
 'use client'
 
-import CategoryCard from '@/components/Dashboard/CategoryCard'
 import StatsCard from '@/components/Dashboard/StatsCard'
 import { motion } from 'framer-motion'
-import { Clock, Swords, Users, Trophy, Zap, History, UserPlus } from 'lucide-react'
+import { Clock, Swords, Users, Trophy, Zap, History } from 'lucide-react'
 import Link from 'next/link'
+import { useEffect, useState } from 'react'
+import { DashboardService } from '@/services/dashboard'
+import { getAuth } from 'firebase/auth'
+import { AuthModal } from '@/components/ui/AuthModal'
 
 export default function DashboardPage() {
-  const userStats = {
-    wpm: 72,
-    accuracy: 94,
-    points: 1250,
-    rank: 'Gold',
-    competitionsWon: 8
+  const [userStats, setUserStats] = useState({
+    wpm: 0,
+    accuracy: 0,
+    points: 0,
+    rank: 'Bronze',
+    competitionsWon: 0
+  });
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const auth = getAuth();
+        const userId = auth.currentUser?.uid;
+        
+        if (!userId) {
+          throw new Error("User not authenticated");
+        }
+
+        const stats = await DashboardService.getUserStats(userId);
+        setUserStats({
+          wpm: stats.bestWpm,
+          accuracy: stats.bestAccuracy,
+          points: stats.points,
+          rank: stats.rank,
+          competitionsWon: stats.competitionsWon
+        });
+
+        setLoading(false);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'An unknown error occurred');
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="container mx-auto px-4 py-8">
+        <div className="flex justify-center items-center h-64">
+          <p>Chargement des données...</p>
+        </div>
+      </div>
+    );
   }
 
+  if (error) {
+    return (
+      <div className="container mx-auto px-4 py-8">
+        <AuthModal
+          isOpen={true}
+          type="error"
+          title="Erreur"
+          message={error}
+          onClose={() => setError(null)}
+        />
+      </div>
+    );
+  }
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -29,13 +87,13 @@ export default function DashboardPage() {
           icon={<Zap className="text-[#FE277E]" />}
           title="Vitesse" 
           value={`${userStats.wpm} MPM`}
-          description="Mots par minute"
+          description="Meilleur score"
         />
         <StatsCard 
           icon={<Clock className="text-[#3B556D]" />}
           title="Précision" 
           value={`${userStats.accuracy}%`}
-          description="Dernier test"
+          description="Meilleur score"
         />
         <StatsCard 
           icon={<Trophy className="text-[#FE277E]" />}

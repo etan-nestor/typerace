@@ -2,8 +2,7 @@ import type { Metadata } from "next";
 import { Inter, Roboto_Mono } from "next/font/google";
 import AnimatedBackground from "@/components/ui/AnimatedBackground";
 import "./globals.css";
-import Navbar from "@/components/Navbar/Navbar";
-import Footer from "@/components/Footer/Footer";
+import { AuthProvider } from "@/context/AuthContext";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -38,9 +37,11 @@ export default function RootLayout({
       </head>
       <body className="min-h-screen bg-gray-50 text-gray-900 antialiased">
         <AnimatedBackground />
-          <main className="flex-1">
+        <AuthProvider>
+        <main className="flex-1">
             {children}
           </main>
+        </AuthProvider>
       </body>
     </html>
   );
