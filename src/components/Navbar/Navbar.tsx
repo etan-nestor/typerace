@@ -39,6 +39,9 @@ export default function Navbar() {
             <Link href="/" className="flex items-center text-sm font-medium hover:text-[#FE277E] transition-colors">
               Accueil
             </Link>
+            <Link href="/revision" className="flex items-center text-sm font-medium hover:text-[#FE277E] transition-colors">
+               Révision
+            </Link>
             <Link href="/about" className="flex items-center text-sm font-medium hover:text-[#FE277E] transition-colors">
               À propos
             </Link>

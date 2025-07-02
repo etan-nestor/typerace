@@ -7,14 +7,79 @@ import { motion } from 'framer-motion'
 import { ArrowRight, Mail, Lock, Eye, EyeOff } from 'lucide-react'
 import Link from 'next/link'
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
+import { AuthService } from '@/services/auth'
+import { AuthModal } from '@/components/ui/AuthModal'
 
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false)
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [rememberMe, setRememberMe] = useState(false)
+  const [modal, setModal] = useState<{
+    type: 'loading' | 'success' | 'error'
+    isOpen: boolean
+    title: string
+    message?: string
+  }>({ 
+    type: 'loading', 
+    isOpen: false, 
+    title: '' 
+  })
+  const router = useRouter()
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+
+    if (!email || !password) {
+      setModal({
+        type: 'error',
+        isOpen: true,
+        title: 'Champs manquants',
+        message: 'Veuillez remplir tous les champs'
+      })
+      return
+    }
+
+    setModal({
+      type: 'loading',
+      isOpen: true,
+      title: 'Connexion en cours...',
+      message: ''
+    })
+
+    const result = await AuthService.login(email, password)
+
+    if (result.success) {
+      setModal({
+        type: 'success',
+        isOpen: true,
+        title: 'Connexion réussie !',
+        message: 'Redirection vers le tableau de bord...'
+      })
+      setTimeout(() => router.push('/dashboard'), 1500)
+    } else {
+      setModal({
+        type: 'error',
+        isOpen: true,
+        title: 'Erreur de connexion',
+        message: result.error
+      })
+    }
+  }
 
   return (
     <div className="relative min-h-screen w-full overflow-hidden pt-[72px]">
       <AnimatedBackground />
       <div className="relative z-10 container mx-auto px-4 h-full flex items-center justify-center py-12">
+        <AuthModal
+          isOpen={modal.isOpen}
+          type={modal.type}
+          title={modal.title}
+          message={modal.message}
+          onClose={() => setModal(prev => ({ ...prev, isOpen: false }))}
+        />
+
         <motion.div
           className="w-full max-w-md"
           initial={{ opacity: 0, y: 20 }}
@@ -36,9 +101,8 @@ export default function LoginPage() {
               </p>
             </div>
 
-            <form className="space-y-6">
+            <form className="space-y-6" onSubmit={handleSubmit}>
               <div className="space-y-4">
-                {/* Champ Email */}
                 <div className="relative">
                   <div className="absolute left-3 top-1/2 transform -translate-y-1/2">
                     <Mail className="h-5 w-5 text-[#3B556D]" />
@@ -48,12 +112,13 @@ export default function LoginPage() {
                     name="email"
                     type="email"
                     required
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                     className="w-full pl-10 pr-4 py-3 bg-transparent border border-[rgba(255,255,255,0.2)] rounded-lg focus:ring-2 focus:ring-[#FE277E] focus:border-transparent outline-none transition-all"
                     placeholder="Adresse email"
                   />
                 </div>
 
-                {/* Champ Mot de passe */}
                 <div className="relative">
                   <div className="absolute left-3 top-1/2 transform -translate-y-1/2">
                     <Lock className="h-5 w-5 text-[#FE277E]" />
@@ -63,6 +128,8 @@ export default function LoginPage() {
                     name="password"
                     type={showPassword ? "text" : "password"}
                     required
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
                     className="w-full pl-10 pr-10 py-3 bg-transparent border border-[rgba(255,255,255,0.2)] rounded-lg focus:ring-2 focus:ring-[#FE277E] focus:border-transparent outline-none transition-all"
                     placeholder="Mot de passe"
                   />
@@ -82,6 +149,8 @@ export default function LoginPage() {
                     id="remember-me"
                     name="remember-me"
                     type="checkbox"
+                    checked={rememberMe}
+                    onChange={(e) => setRememberMe(e.target.checked)}
                     className="h-4 w-4 rounded border-gray-300 text-[#FE277E] focus:ring-[#FE277E]"
                   />
                   <label htmlFor="remember-me" className="ml-2 block text-sm text-muted-foreground">
@@ -97,6 +166,7 @@ export default function LoginPage() {
               </div>
 
               <AnimatedButton
+                type="submit"
                 className="w-full flex items-center justify-center gap-2">
                 Se connecter <ArrowRight size={18} />
               </AnimatedButton>

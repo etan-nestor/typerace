@@ -16,15 +16,15 @@ export const Selectors = ({
   const themes = Object.keys(typingContent[selectedCategory as keyof typeof typingContent].themes)
 
   return (
-    <div className="bg-white/5 border border-white/15 rounded-xl p-4 mb-6 backdrop-blur-sm shadow-lg">
+    <div className="bg-white/5 border border-white/15 rounded-xl p-4 mb-4 backdrop-blur-sm shadow-lg">
       <div className="flex flex-wrap gap-4 justify-center">
-        <div className="flex-1 min-w-[200px]">
+        <div className="flex-1 min-w-[100px]">
           <label htmlFor="category" className="block text-sm text-gray-400 mb-1">Catégorie</label>
           <select
             id="category"
             value={selectedCategory}
             onChange={(e) => onCategoryChange(e.target.value)}
-            className="w-full bg-white/5 border border-white/15 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#FE277E]/50"
+            className="w-full bg-pink/5 border border-white/15 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#FE277E]/50"
           >
             {categories.map(category => (
               <option key={category} value={category}>

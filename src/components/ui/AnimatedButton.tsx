@@ -9,6 +9,7 @@ interface AnimatedButtonProps {
   size?: 'sm' | 'default' | 'lg'
   className?: string
   onClick?: () => void
+  type?: 'button' | 'submit' | 'reset' // Ajout de la prop type
 }
 
 const AnimatedButton = ({ 
@@ -16,7 +17,8 @@ const AnimatedButton = ({
   variant = 'default', 
   size = 'default', 
   className = '',
-  onClick
+  onClick,
+  type = 'button' // Valeur par défaut
 }: AnimatedButtonProps) => {
   const baseClasses = 'rounded-full font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FE277E] focus-visible:ring-offset-2'
   
@@ -34,6 +36,7 @@ const AnimatedButton = ({
   
   return (
     <motion.button
+      type={type} // Ajout de la prop type
       className={`${baseClasses} ${sizeClasses} ${variantClasses} ${className}`}
       whileHover={{ scale: 1.05 }}
       whileTap={{ scale: 0.95 }}

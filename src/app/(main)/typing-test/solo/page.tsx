@@ -122,7 +122,7 @@ export default function TypingTestPage() {
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="max-w-6xl mx-auto"
+        className="max-w-7xl mx-auto flex flex-col gap-6"
       >
         <Selectors
           selectedCategory={selectedCategory}
@@ -131,26 +131,26 @@ export default function TypingTestPage() {
           onThemeChange={handleThemeChange}
         />
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Cartes de stats à gauche */}
-          <div className="lg:col-span-1">
+        <div className="flex flex-col lg:flex-row gap-6">
+          {/* Colonne gauche - Stats réduites */}
+          <div className="lg:w-1/5 scale-90 origin-left">
             <StatsCards wpm={wpm} accuracy={accuracy} errors={errors} />
           </div>
 
-          {/* Contenu au centre */}
-          <div className="lg:col-span-1 flex items-center justify-center">
+          {/* Colonne centrale - Contenu élargi */}
+          <div className="lg:w-3/5 flex flex-col gap-4">
             <ContentCard text={sampleText} input={input} />
+            <KeyDisplay lastPressedKey={lastPressedKey} />
           </div>
 
-          {/* Contrôles à droite */}
-          <div className="lg:col-span-1 flex flex-col items-end justify-between">
+          {/* Colonne droite - Contrôles réduits */}
+          <div className="lg:w-1/5 scale-90 origin-right">
             <Controls 
               useTimer={useTimer}
               timer={timer}
               onTimerChange={handleTimerChange}
               onRestart={handleRestart}
             />
-            <KeyDisplay lastPressedKey={lastPressedKey} />
           </div>
         </div>
       </motion.div>
