@@ -15,12 +15,6 @@ export default function DashboardPage() {
     competitionsWon: 8
   }
 
-  const categories = [
-    { id: 1, name: 'Technologie', topics: ['IA', 'Blockchain', 'Cybersécurité'] },
-    { id: 2, name: 'Science', topics: ['Espace', 'Biologie', 'Physique'] },
-    { id: 3, name: 'Actualités', topics: ['Politique', 'Économie', 'Sport'] },
-    { id: 4, name: 'Littérature', topics: ['Classiques', 'Poésie', 'Romans'] }
-  ]
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -56,31 +50,6 @@ export default function DashboardPage() {
           description="Compétitions"
         />
       </motion.div>
-
-      {/* Section Catégories */}
-      <motion.section
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.2 }}
-        className="mb-12"
-      >
-        <div className="flex justify-between items-center mb-6">
-          <h2 className="text-2xl font-bold">Choisissez une catégorie</h2>
-          <Link href="/typing-test/random" className="text-sm text-[#FE277E] hover:underline">
-            Aléatoire
-          </Link>
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {categories.map((category, index) => (
-            <CategoryCard 
-              key={category.id}
-              category={category}
-              delay={index * 0.1}
-            />
-          ))}
-        </div>
-      </motion.section>
 
       {/* Section Modes de jeu */}
       <motion.section

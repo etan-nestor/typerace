@@ -1,3 +1,4 @@
+// app/register/page.tsx
 'use client'
 
 import AnimatedBackground from '@/components/ui/AnimatedBackground'
@@ -13,7 +14,7 @@ import { AuthModal } from '@/components/ui/AuthModal'
 
 export default function RegisterPage() {
   const [showPassword, setShowPassword] = useState(false)
-  const [fullname, setFullname] = useState('')
+  const [fullName, setFullName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [termsAccepted, setTermsAccepted] = useState(false)
@@ -32,7 +33,7 @@ export default function RegisterPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
-    if (!fullname || !email || !password) {
+    if (!fullName || !email || !password) {
       setModal({
         type: 'error',
         isOpen: true,
@@ -59,14 +60,14 @@ export default function RegisterPage() {
       message: ''
     })
 
-    const result = await AuthService.register(email, password, fullname)
+    const result = await AuthService.register(email, password, fullName)
 
     if (result.success) {
       setModal({
         type: 'success',
         isOpen: true,
         title: 'Compte créé !',
-        message: 'Patientez ...'
+        message: 'Redirection en cours...'
       })
       setTimeout(() => router.push('/dashboard'), 1500)
     } else {
@@ -119,12 +120,12 @@ export default function RegisterPage() {
                     <User className="h-5 w-5 text-[#FE277E]" />
                   </div>
                   <input
-                    id="fullname"
-                    name="fullname"
+                    id="fullName"
+                    name="fullName"
                     type="text"
                     required
-                    value={fullname}
-                    onChange={(e) => setFullname(e.target.value)}
+                    value={fullName}
+                    onChange={(e) => setFullName(e.target.value)}
                     className="w-full pl-10 pr-4 py-3 bg-transparent border border-[rgba(255,255,255,0.2)] rounded-lg focus:ring-2 focus:ring-[#FE277E] focus:border-transparent outline-none transition-all"
                     placeholder="Nom complet"
                   />
